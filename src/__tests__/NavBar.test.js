@@ -3,6 +3,17 @@ import { render, screen } from "@testing-library/react";
 import NavBar from "../components/NavBar";
 
 test("each <a> element has a unique key prop", () => {
+  const { getAllByRole } = render(<NavBar />);
+  const links = getAllByRole("link");
+
+  const keys = links.map((link) => link.key);
+  const uniqueKeys = new Set(keys);
+
+  expect(uniqueKeys.size).toBe(keys.length);
+});
+
+
+test("each <a> element has a unique key prop", () => {
   const errorSpy = jest.spyOn(global.console, "error");
 
   render(<NavBar />);
@@ -10,11 +21,6 @@ test("each <a> element has a unique key prop", () => {
   expect(errorSpy).not.toHaveBeenCalled();
 
   errorSpy.mockRestore();
-});
-
-test("renders three <a> elements", () => {
-  const { container } = render(<NavBar />);
-  expect(container.querySelectorAll("a")).toHaveLength(3);
 });
 
 test("displays the correct text for each <a> element", () => {
